@@ -72,15 +72,15 @@ D, T	vor C, S, Z
 X	nach C, K, Q
 */
 
-#define ae 228
-#define ue 252
-#define oe 246
-#define ss 223
+#define ae ( (char) 228 )
+#define ue ( (char) 252 )
+#define oe ( (char) 246 )
+#define ss ( (char) 223 )
 
 
-#define AE 228
-#define UE 252
-#define OE 246
+#define AE ( (char) 228 )
+#define UE ( (char) 252 )
+#define OE ( (char) 246 )
 
 char * soundex_ger(char *s){
   // input: ISO-8859-1
