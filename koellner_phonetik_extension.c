@@ -4,37 +4,37 @@
 #include "php.h"
  
 #define PHP_MY_EXTENSION_VERSION "1.0"
-#define PHP_MY_EXTENSION_EXTNAME "my_extension"
+#define PHP_MY_EXTENSION_EXTNAME "koellner_phonetik_extension"
 
 #include "stdlib.h"
 #include "stdio.h"
 #include "string.h"
  
-extern zend_module_entry my_extension_module_entry;
-#define phpext_my_extension_ptr &my_extension_module_entry
+extern zend_module_entry koellner_phonetik_extension_module_entry;
+#define phpext_koellner_phonetik_extension_ptr &koellner_phonetik_extension_module_entry
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_str_replace, 0, 0, 1)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_koellner_phonetik, 0, 0, 1)
 	ZEND_ARG_INFO(0, str)
 	ZEND_ARG_INFO(1, raw_output)
 ZEND_END_ARG_INFO()
  
-// declaration of a custom koelln_phonetic()
-PHP_FUNCTION(koelln_phonetic);
+// declaration of a custom koellner_phonetik()
+PHP_FUNCTION(koellner_phonetik);
  
 // list of custom PHP functions provided by this extension
 // set {NULL, NULL, NULL} as the last record to mark the end of list
-static function_entry koelln_phonetics[] = {
-    PHP_FE(koelln_phonetic, NULL)
+static function_entry koellner_phonetiks[] = {
+    PHP_FE(koellner_phonetik, arginfo_koellner_phonetik)
     {NULL, NULL, NULL}
 };
  
 // the following code creates an entry for the module and registers it with Zend.
-zend_module_entry my_extension_module_entry = {
+zend_module_entry koellner_phonetik_extension_module_entry = {
 #if ZEND_MODULE_API_NO >= 20010901
     STANDARD_MODULE_HEADER,
 #endif
     PHP_MY_EXTENSION_EXTNAME,
-    koelln_phonetics,
+    koellner_phonetiks,
     NULL, // name of the MINIT function or NULL if not applicable
     NULL, // name of the MSHUTDOWN function or NULL if not applicable
     NULL, // name of the RINIT function or NULL if not applicable
@@ -46,7 +46,7 @@ zend_module_entry my_extension_module_entry = {
     STANDARD_MODULE_PROPERTIES
 };
  
-ZEND_GET_MODULE(my_extension)
+ZEND_GET_MODULE(koellner_phonetik_extension)
 
 /*
 Buchstabe	Kontext	Code
@@ -88,7 +88,7 @@ char * soundex_ger(char *s){
   int len = strlen(s);
 
   #define a_lowered(c) *(p_lowered++) = (c);
-  char *lowered = malloc(len)+2;
+  char *lowered = emalloc(len+2);
   char *p_lowered = lowered;
   char *c;
 
@@ -116,7 +116,7 @@ char * soundex_ger(char *s){
 
   // printf("%s lowered: %s\n",s, &(lowered[1]));
 
-  char * r = malloc(len+2);
+  char * r = emalloc(len+2);
 
   #define a_out(c) if (p_out == r || *(p_out-1) != c) *(p_out++) = c;
   char * p_out = &r[0];
@@ -202,19 +202,20 @@ char * soundex_ger(char *s){
         break;
     }
   }
+  efree(lowered);
+  a_out('\0');
   return r;
 }
  
-// implementation of a custom koelln_phonetic()
-PHP_FUNCTION(koelln_phonetic)
+// implementation of a custom koellner_phonetik()
+PHP_FUNCTION(koellner_phonetik)
 {
     char *arg;
     int arg_len;
     zend_bool raw_output = 0;
-    
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s|b", &arg, &arg_len, &raw_output) == FAILURE) {
             return;
     }
-    
-    RETVAL_STRING(soundex_ger(arg), 1);
+    char *ret = soundex_ger(arg);
+    RETVAL_STRING(ret, 0);
 }
