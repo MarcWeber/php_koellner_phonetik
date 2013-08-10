@@ -140,8 +140,9 @@ char * soundex_ger(char *s){
       case 'h': break;
       case 'b': a_out('1'); break;
       case 'p':
-        if (lowered[i+1] == 'h') a_out('3')
-        else a_out('1'); 
+        if (lowered[i+1] == 'h') {
+          a_out('3');
+        } else a_out('1');
         break;
 
       case 'd':
@@ -151,7 +152,8 @@ char * soundex_ger(char *s){
           a_out('2');
           break;
         }
-        if (next == 'c' || next == 's' || next == 'z'){ a_out('8');
+        if (next == 'c' || next == 's' || next == 'z'){
+          a_out('8');
           break;
         }
       case 'f':
@@ -162,6 +164,9 @@ char * soundex_ger(char *s){
       case 'g':
       case 'k':
       case 'q': a_out('4'); break;
+
+      case 's':
+      case 'z': a_out('8'); break;
 
 
       case 'c':
@@ -202,11 +207,12 @@ char * soundex_ger(char *s){
         break;
     }
   }
+
   efree(lowered);
   a_out('\0');
   return r;
 }
- 
+
 // implementation of a custom koellner_phonetik()
 PHP_FUNCTION(koellner_phonetik)
 {

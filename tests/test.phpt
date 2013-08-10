@@ -11,6 +11,7 @@ echo koellner_phonetik("Meier")."\n";
 echo koellner_phonetik("Maier")."\n";
 echo koellner_phonetik("Maier")."\n";
 echo koellner_phonetik("Müller-Lüdenscheidt")."\n";
+echo koellner_phonetik("Zumpe")."\n";
 ?>
 --EXPECT--
 657
@@ -20,3 +21,4 @@ echo koellner_phonetik("Müller-Lüdenscheidt")."\n";
 67
 67
 65752682
+861
